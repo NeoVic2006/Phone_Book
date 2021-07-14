@@ -1,12 +1,32 @@
-from rest_framework import fields, serializers
-from .models import Post
+from rest_framework import serializers
+from .models import Answer, Polls, Question
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PollSerializer(serializers.ModelSerializer):
     class Meta:
-       model = Post
-       fields = (
+       model = Polls
+       fields = [
            'title', 
-           'description',
-           'owner'
-       )  
+          
+       ]
+
+
+class AnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = [
+            'id',
+            'answer_text',
+            'is_right',
+        ]
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+    answer = AnswerSerializer(many=True, read_only=True)
+    class Meta:
+       model = Question
+       fields = [
+           'title',
+           'answer'
+       ]
+

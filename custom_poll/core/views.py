@@ -1,33 +1,28 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from rest_framework import serializers
-from rest_framework import permissions
-
+from rest_framework import generics, status
+from .models import Polls, Question
+from .serializes import PollSerializer, QuestionSerializer
 
 # Third party imports 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .serializes import PostSerializer
-from .models import Post
+class Poll(generics.ListAPIView):
+    serializer_class = PollSerializer
+    queryset = Polls.objects.all()
 
 
-class TestView(APIView):
-
-    permission_classes = (IsAuthenticated, )
-
-
-    def get(self, request, *ars, **kwargs):
-        queryset = Post.objects.all()
-        serializer = PostSerializer(queryset, many=True)
+class Questions(APIView):
+    def get(self, request, format=None, **kwargs):
+        question = Question.objects.filter(poll__title=kwargs['topic'])
+        serializer = QuestionSerializer(question, many=True)
         return Response(serializer.data)
 
-
-    def post(self, request, *ars, **kwargs):
-        serializer = PostSerializer(data=request.data)
+    def post(self, request, format=None, **kwargs):
+        serializer = QuestionSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save() 
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+

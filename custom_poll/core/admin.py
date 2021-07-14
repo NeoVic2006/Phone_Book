@@ -2,16 +2,11 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Post, Answer
+
 from . import models
 
-#admin.site.register(Post)
 
-
-# ------------------------------------
-
-
-@admin.register(models.Poll)
+@admin.register(models.Polls)
 class PollAdmin(admin.ModelAdmin):
     list_display = [
         'name',
@@ -31,7 +26,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 @admin.register(models.Answer)
 class AnswerInlineModel(admin.ModelAdmin):
-    model = Answer
+
     list_display = [
         'answer_text',
         'question',
