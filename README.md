@@ -1,6 +1,6 @@
 
 Installation: 
-Please clone this repository: https://github.com/NeoVic2006/Phone_Book.git
+Please clone this repository: https://github.com/NeoVic2006/Polls_with_questions_answers.git
 
 
 
